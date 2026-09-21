@@ -95,11 +95,7 @@ Route::prefix('v1')->group(function ()
 
     Route::get('admin/security/policy', [SettingsController::class, 'getPolicy']);
 
-
-
     Route::post('sync/bulk', [SyncController::class, 'bulkSync']);
-
-   
 
     Route::controller(AuthController::class)->group(function () {
 
@@ -109,8 +105,6 @@ Route::prefix('v1')->group(function ()
 
     });
 
-
-
     Route::controller(AuthPasswordController::class)->group(function () {
 
         Route::post('auth/forgot-password', 'forgot');
@@ -118,12 +112,6 @@ Route::prefix('v1')->group(function ()
         Route::post('auth/reset-password', 'reset')->middleware('throttle:reset');
 
     });
-
-
-
-   
-
-
 
     Route::middleware(['auth:api', 'activity:admin', 'throttle:60,1'])->group(function () {
 
@@ -658,174 +646,6 @@ Route::prefix('v1')->group(function ()
 
     }); // نهاية مجموعة ADMIN
 
-    // ============================================================
-    // 2️⃣ مجموعة PUBLIC - عرض فقط (بدون حذف/تعديل)
-    // ============================================================
-    
-    // Route::middleware(['auth:api', 'throttle:100,1'])->group(function () {
-
-    //     // ============================================================
-    //     // مخرجات تعلم البرنامج (عرض فقط)
-    //     // ============================================================
-    //     Route::prefix('programs/{program_id}')->group(function () {
-    //         Route::get('learning-outcomes', [ProgramLearningOutcomeController::class, 'index'])
-    //             ->name('learning-outcomes.index');
-
-    //         Route::get('learning-outcomes/{plo_id}', [ProgramLearningOutcomeController::class, 'show'])
-    //             ->name('learning-outcomes.show')
-    //             ->where('plo_id', '[0-9]+');
-
-    //         Route::get('learning-outcomes/stats', [ProgramLearningOutcomeController::class, 'stats'])
-    //             ->name('learning-outcomes.stats');
-
-    //         Route::get('learning-outcomes/domain/{domain}', [ProgramLearningOutcomeController::class, 'byDomain'])
-    //             ->name('learning-outcomes.by-domain')
-    //             ->where('domain', 'Knowledge|Intellectual|Professional|General');
-    //     });
-
-    //     // ============================================================
-    //     // المقررات والتوصيفات (عرض فقط)
-    //     // ============================================================
-    //     Route::prefix('courses/{course_id}')->group(function () {
-    //         // وصف المقرر
-    //         Route::get('description', [CourseDescriptionController::class, 'show'])
-    //             ->name('description.show');
-
-    //         // مخرجات التعلم
-    //         Route::get('learning-outcomes', [CourseLearningOutcomeController::class, 'index'])
-    //             ->name('learning-outcomes.index');
-
-    //         Route::get('learning-outcomes/{clo_id}', [CourseLearningOutcomeController::class, 'show'])
-    //             ->name('learning-outcomes.show')
-    //             ->where('clo_id', '[0-9]+');
-
-    //         Route::get('learning-outcomes/domain/{domain}', [CourseLearningOutcomeController::class, 'byDomain'])
-    //             ->name('learning-outcomes.by-domain')
-    //             ->where('domain', 'Knowledge|Intellectual|Professional|General');
-
-    //         // المواضيع
-    //         Route::get('topics', [CourseTopicController::class, 'index'])
-    //             ->name('topics.index');
-
-    //         Route::get('topics/{topic_id}', [CourseTopicController::class, 'show'])
-    //             ->name('topics.show')
-    //             ->where('topic_id', '[0-9]+');
-
-    //         Route::get('topics/by-part/{part}', [CourseTopicController::class, 'byPart'])
-    //             ->name('topics.by-part')
-    //             ->where('part', 'نظري|عملي|تمارين|سريري');
-
-    //         // التكليفات
-    //         Route::get('assignments', [CourseAssignmentController::class, 'index'])
-    //             ->name('assignments.index');
-
-    //         Route::get('assignments/{assignment_id}', [CourseAssignmentController::class, 'show'])
-    //             ->name('assignments.show')
-    //             ->where('assignment_id', '[0-9]+');
-
-    //         Route::get('assignments/by-part/{part}', [CourseAssignmentController::class, 'byPart'])
-    //             ->name('assignments.by-part')
-    //             ->where('part', 'نظري|عملي|تمارين|سريري');
-
-    //         // طرق التقييم
-    //         Route::get('assessments', [CourseAssessmentController::class, 'index'])
-    //             ->name('assessments.index');
-
-    //         Route::get('assessments/{assessment_id}', [CourseAssessmentController::class, 'show'])
-    //             ->name('assessments.show')
-    //             ->where('assessment_id', '[0-9]+');
-
-    //         Route::get('assessments/by-type/{assessment_type}', [CourseAssessmentController::class, 'byType'])
-    //             ->name('assessments.by-type');
-
-    //         Route::get('assessments/balance-check', [CourseAssessmentController::class, 'balanceCheck'])
-    //             ->name('assessments.balance-check');
-
-    //         // المصادر
-    //         Route::get('references', [CourseReferenceController::class, 'index'])
-    //             ->name('references.index');
-
-    //         Route::get('references/{reference_id}', [CourseReferenceController::class, 'show'])
-    //             ->name('references.show')
-    //             ->where('reference_id', '[0-9]+');
-
-    //         Route::get('references/by-type/{type}', [CourseReferenceController::class, 'byType'])
-    //             ->name('references.by-type')
-    //             ->where('type', 'main|support|electronic');
-
-    //         // الضوابط
-    //         Route::get('policies', [CoursePolicyController::class, 'index'])
-    //             ->name('policies.index');
-
-    //         Route::get('policies/{policy_id}', [CoursePolicyController::class, 'show'])
-    //             ->name('policies.show')
-    //             ->where('policy_id', '[0-9]+');
-
-    //         Route::get('policies/fixed-template', [CoursePolicyController::class, 'fixedTemplate'])
-    //             ->name('policies.fixed-template');
-
-    //         Route::get('policies/fixed-only', [CoursePolicyController::class, 'fixedOnly'])
-    //             ->name('policies.fixed-only');
-
-    //         Route::get('policies/additional-only', [CoursePolicyController::class, 'additionalOnly'])
-    //             ->name('policies.additional-only');
-    //     });
-
-    //     // ============================================================
-    //     // الأسئلة (عرض فقط)
-    //     // ============================================================
-    //     Route::prefix('topics/{topic_id}')->group(function () {
-    //         Route::get('questions', [TopicQuestionController::class, 'index'])
-    //             ->name('questions.index');
-
-    //         Route::get('questions/{question_id}', [TopicQuestionController::class, 'show'])
-    //             ->name('questions.show')
-    //             ->where('question_id', '[0-9]+');
-
-    //         Route::get('questions/by-type/{question_type}', [TopicQuestionController::class, 'byType'])
-    //             ->name('questions.by-type')
-    //             ->where('question_type', 'MCQ|essay');
-
-    //         Route::get('questions/used-in-exams', [TopicQuestionController::class, 'usedInExams'])
-    //             ->name('questions.used-in-exams');
-    //     });
-
-    //     // ============================================================
-    //     // استراتيجيات التدريس (عرض فقط)
-    //     // ============================================================
-    //     Route::get('teaching-strategies', [TeachingStrategyController::class, 'index'])
-    //         ->name('teaching-strategies.index');
-
-    //     Route::get('teaching-strategies/{id}', [TeachingStrategyController::class, 'show'])
-    //         ->name('teaching-strategies.show')
-    //         ->where('id', '[0-9]+');
-
-    //     Route::get('teaching-strategies/by-category/{category}', [TeachingStrategyController::class, 'byCategory'])
-    //         ->name('teaching-strategies.by-category');
-
-    //     Route::get('teaching-strategies/active-only', [TeachingStrategyController::class, 'activeOnly'])
-    //         ->name('teaching-strategies.active-only');
-
-    //     // ============================================================
-    //     // طرق التقييم (عرض فقط)
-    //     // ============================================================
-    //     Route::get('assessment-methods', [AssessmentMethodController::class, 'index'])
-    //         ->name('assessment-methods.index');
-
-    //     Route::get('assessment-methods/{id}', [AssessmentMethodController::class, 'show'])
-    //         ->name('assessment-methods.show')
-    //         ->where('id', '[0-9]+');
-
-    //     Route::get('assessment-methods/by-category/{category}', [AssessmentMethodController::class, 'byCategory'])
-    //         ->name('assessment-methods.by-category');
-
-    //     Route::get('assessment-methods/active-only', [AssessmentMethodController::class, 'activeOnly'])
-    //         ->name('assessment-methods.active-only');
-
-    // });
-
-
-
     Route::prefix('colleges/{college}/financial')->group(function () {
 
    
@@ -845,8 +665,6 @@ Route::prefix('v1')->group(function ()
         Route::put('cycles/{cycle}/status', [FinancialController::class, 'updateStatus']);
 
     });
-
-    // داخل Route::prefix('v1')->middleware(...)->group(function () { ...
 
     Route::prefix('qa')->group(function () {
         Route::controller(QaManagerController::class)->group(function () {

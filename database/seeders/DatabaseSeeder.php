@@ -30,9 +30,9 @@ class DatabaseSeeder extends Seeder
             User::updateOrCreate(
                 ['academic_number' => 'ADM0001'],
                 [
-                    'full_name' => 'علاء حسين سعيد زيد علي',
+                    'full_name' => ' عبدالله الهاشمي ',
                     'email' => 'ala.hussein002@gmail.com',
-                    'phone' => '711155980',
+                    'phone' => '734637112',
                     'password' => Hash::make('Admin@12345'),
                     'gender' => 0,
                     'user_type_id' => $adminType->user_type_id,
